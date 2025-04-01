@@ -1,5 +1,7 @@
 from flask import Flask, request, jsonify
 import numpy as np
+import base64
+import uuid
 
 app = Flask(__name__)
 
@@ -38,6 +40,19 @@ def json_get_post():
     y = data["y"]
     z = np.matmul(x, y)
     return jsonify(z.tolist())
+
+
+# Accept incoming data as JSON
+@app.route('/image_post', methods=['POST'])
+def image_post():
+    data = request.get_json()
+    image_data = base64.b64decode(data["image"])
+
+    file_name = str(uuid.uuid4()) + ".jpg"
+    with open(file_name, "wb") as file:
+        file.write(image_data)
+    return f"{data}"
+    # return ""
 
 
 if __name__ == '__main__':

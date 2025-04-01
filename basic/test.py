@@ -1,5 +1,7 @@
 import requests
 import numpy as np
+import base64
+
 
 if __name__ == '__main__':
     payload = {}
@@ -40,3 +42,10 @@ if __name__ == '__main__':
     response = requests.request("POST", url, json=test_data)
     json_response = response.json()
     print(f"Testing POST and GET with JSON data ---------------------------------------------------\n{json_response}\n")
+    # Test image POST
+    url = "http://127.0.0.1:5000/image_post"
+    with open('../data/img/car_0.jpg', 'rb') as f:
+        im_b64 = base64.b64encode(f.read()).decode('utf-8')
+    test_data = {"image": im_b64}
+    response = requests.request("POST", url, json=test_data)
+    print(f"Testing image POST -------------------------------------------------------------------------\n{response}\n")
